@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+<h2>Login</h2>
+
+<input type="text" id="emailOrPhone" placeholder="Email or Phone"><br><br>
+<input type="password" id="password" placeholder="Password"><br><br>
+
+<button onclick="login()">Login</button>
+
+<script>
+function login() {
+    fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            emailOrPhone: document.getElementById("emailOrPhone").value,
+            password: document.getElementById("password").value
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success){
+            alert("Login Success");
+
+            // store user info
+            localStorage.setItem("user_id", data.user.user_id);
+            localStorage.setItem("role", data.user.role);
+            localStorage.setItem("provider_id", data.user.provider_id);
+
+            // redirect based on role
+            if(data.user.role === "provider"){
+                window.location.href = "provider.html";
+            } else {
+                window.location.href = "volunteer.html";
+            }
+        } else {
+            alert("Invalid Credentials");
+        }
+    });
+}
+</script>
+
+</body>
+</html>

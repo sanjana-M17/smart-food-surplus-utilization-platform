@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Food</title>
+</head>
+<body>
+
+<h2>Add Food</h2>
+
+<input type="text" id="food_name" placeholder="Food Name"><br><br>
+<input type="number" id="quantity" placeholder="Quantity"><br><br>
+<input type="datetime-local" id="expiry_time"><br><br>
+
+<input type="text" id="street" placeholder="Street"><br><br>
+<input type="text" id="area" placeholder="Area"><br><br>
+<input type="text" id="city" placeholder="City"><br><br>
+<input type="text" id="state" placeholder="State"><br><br>
+<input type="text" id="pincode" placeholder="Pincode"><br><br>
+
+<button onclick="addFood()">Add Food</button>
+
+<script>
+function addFood() {
+
+    const provider_id = localStorage.getItem("provider_id");// important
+
+    fetch("http://localhost:3000/add-food", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            provider_id: provider_id,
+            food_name: document.getElementById("food_name").value,
+            quantity: document.getElementById("quantity").value,
+            expiry_time: document.getElementById("expiry_time").value,
+            street: document.getElementById("street").value,
+            area: document.getElementById("area").value,
+            city: document.getElementById("city").value,
+            state: document.getElementById("state").value,
+            pincode: document.getElementById("pincode").value
+        })
+    })
+    
+    .then(res => res.text())
+    .then(data => {
+        alert(data);
+    });
+ let expiry = document.getElementById("expiry_time").value;
+expiry = expiry.replace("T", " ") + ":00";   
+expiry_time: expiry
+if(!expiry){
+    alert("Please select expiry time");
+    return;
+}
+
+
+}
+</script>
+
+</body>
+</html>

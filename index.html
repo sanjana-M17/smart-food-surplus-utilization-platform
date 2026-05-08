@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Surplus App</title>
+</head>
+<body>
+
+<h2>Register</h2>
+
+<input type="text" id="name" placeholder="Name"><br><br>
+<input type="email" id="email" placeholder="Email"><br><br>
+<input type="text" id="phone" placeholder="Phone"><br><br>
+<input type="password" id="password" placeholder="Password"><br><br>
+
+<select id="role">
+    <option value="provider">Provider</option>
+    <option value="volunteer">Volunteer</option>
+</select><br><br>
+
+<button onclick="register()">Register</button>
+
+<script>
+function register() {
+    fetch("http://localhost:3000/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            phone: document.getElementById("phone").value,
+            password: document.getElementById("password").value,
+            role: document.getElementById("role").value
+        })
+    })
+    .then(res => res.text())
+    .then(data => alert(data));
+}
+</script>
+
+</body>
+</html>
