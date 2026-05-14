@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Provider Dashboard</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .dashboard{
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1{
+            margin-bottom: 30px;
+        }
+
+        button{
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            border: none;
+            background: green;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background: darkgreen;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <h1>Provider Dashboard</h1>
+
+        <button onclick="goToAddFood()">
+            Add Food
+        </button>
+
+        <button onclick="goToAvailableFood()">
+            View Available Food
+        </button>
+
+        <button onclick="goToPickupRequests()">
+            Pickup Requests
+        </button>
+
+        <button onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+    <script>
+
+        function goToAddFood(){
+            window.location.href = "addFood.html";
+        }
+
+        function goToAvailableFood(){
+            window.location.href = "availableFood.html";
+        }
+
+        function goToPickupRequests(){
+            window.location.href = "pickupRequest.html";
+        }
+
+        function logout(){
+
+            localStorage.clear();
+
+            alert("Logged out successfully");
+
+            window.location.href = "login.html";
+        }
+
+    </script>
+
+</body>
+</html>

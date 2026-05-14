@@ -181,27 +181,114 @@ app.get('/provider-requests/:provider_id', (req, res) => {
     });
 
 });
-app.put('/update-request-status', (req, res) => {
+app.put('/update-request-status/:id', (req, res) => {
 
-    const { request_id, status } = req.body;
+    const requestId = req.params.id;
 
-    console.log("Updating:", request_id, status); // debug
+    const { status } = req.body;
+
+    let sql = "";
+    let values = [];
+
+    if(status === "accepted"){
+
+        sql = `
+        UPDATE pickup_requests
+        SET status = ?, pickup_time = NOW()
+        WHERE request_id = ?
+        `;
+
+        values = [status, requestId];
+
+    }
+
+    else{
+
+        sql = `
+        UPDATE pickup_requests
+        SET status = ?
+        WHERE request_id = ?
+        `;
+
+        values = [status, requestId];
+
+    }
+
+    db.query(sql, values, (err, result) => {
+
+        if(err){
+
+            console.log(err);
+
+            return res.status(500).json({
+                message: "Database Error"
+            });
+
+        }
+
+        res.json({
+            message: `Request ${status} successfully`
+        });
+
+    });
+
+});
+app.get('/available-food', (req, res) => {
 
     const sql = `
-        UPDATE pickup_requests 
-        SET status = ?, 
-            pickup_time = IF(? = 'completed', NOW(), pickup_time)
-        WHERE request_id = ?
+        SELECT * FROM food_listings
+        WHERE status = 'available'
     `;
 
-    db.query(sql, [status, status, request_id], (err, result) => {
+    db.query(sql, (err, result) => {
 
         if(err){
             console.log(err);
-            return res.send("Error updating status");
+            return res.status(500).json({
+                message: "Database error"
+            });
         }
 
-        res.send("Status Updated Successfully");
+        res.json(result);
+
+    });
+
+});
+app.get('/pickup-requests', (req, res) => {
+
+    const sql = `
+    SELECT 
+        pr.request_id,
+        fl.food_name,
+        fl.quantity,
+        u.name AS volunteer_name,
+        pr.status,
+        pr.request_time,
+        pr.pickup_time
+    FROM pickup_requests pr
+
+    JOIN food_listings fl
+    ON pr.food_id = fl.food_id
+
+    JOIN volunteers v
+    ON pr.volunteer_id = v.volunteer_id
+
+    JOIN users u
+    ON v.user_id = u.user_id
+    `;
+
+    db.query(sql, (err, result) => {
+
+        if(err){
+            console.log(err);
+
+            return res.status(500).json({
+                message: "Database Error"
+            });
+        }
+
+        res.json(result);
+
     });
 
 });

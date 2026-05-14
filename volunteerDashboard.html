@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Dashboard</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .dashboard{
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 350px;
+        }
+
+        h1{
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        button{
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            border: none;
+            background: #3498db;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background: #2980b9;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="dashboard">
+
+        <h1>Volunteer Dashboard</h1>
+
+        <button onclick="viewAvailableFood()">
+            View Available Food
+        </button>
+
+        <button onclick="viewMyRequests()">
+            View Pickup Requests
+        </button>
+
+        <button onclick="logout()">
+            Logout
+        </button>
+
+    </div>
+
+    <script>
+
+        function viewAvailableFood(){
+
+            window.location.href = "availableFood.html";
+
+        }
+
+        function viewMyRequests(){
+
+            window.location.href = "pickupRequest.html";
+
+        }
+
+        function logout(){
+
+            localStorage.clear();
+
+            alert("Logged out successfully");
+
+            window.location.href = "login.html";
+
+        }
+
+    </script>
+
+</body>
+</html>

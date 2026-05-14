@@ -35,11 +35,17 @@ function login() {
             localStorage.setItem("provider_id", data.user.provider_id);
 
             // redirect based on role
-            if(data.user.role === "provider"){
-                window.location.href = "provider.html";
-            } else {
-                window.location.href = "volunteer.html";
-            }
+           if(data.role === "provider"){
+
+    window.location.href = "providerDashboard.html";
+
+}
+
+else if(data.role === "volunteer"){
+
+    window.location.href = "volunteerDashboard.html";
+
+}
         } else {
             alert("Invalid Credentials");
         }

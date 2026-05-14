@@ -1,0 +1,169 @@
+<div id="navbar"></div>
+<div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Food</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1{
+            text-align: center;
+            color: #333;
+        }
+
+        #foodContainer{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .food-card{
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .food-card h2{
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .food-card p{
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .btn{
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: green;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .btn:hover{
+            background: darkgreen;
+        }
+        .container{
+            padding:20px;
+        }
+
+    </style>
+</div>
+</head>
+<body>
+
+    <h1>Available Food Listings</h1>
+
+    <div id="foodContainer"></div>
+
+    <script>
+
+        fetch("http://localhost:3000/available-food")
+        .then(response => response.json())
+        .then(data => {
+
+            const container = document.getElementById("foodContainer");
+
+            data.forEach(food => {
+
+                const card = document.createElement("div");
+                card.className = "food-card";
+
+                card.innerHTML = `
+                    <h2>${food.food_name}</h2>
+
+                    <p><strong>Quantity:</strong> ${food.quantity}</p>
+
+                    <p>
+                        <strong>Address:</strong><br>
+                        ${food.street}, ${food.area},<br>
+                        ${food.city}, ${food.state} - ${food.pincode}
+                    </p>
+
+                    <p>
+                        <strong>Expiry:</strong>
+                        ${food.expiry_time}
+                    </p>
+
+                    <button class="btn"
+                        onclick="requestPickup(${food.food_id})">
+                        Request Pickup
+                    </button>
+                `;
+
+                container.appendChild(card);
+
+            });
+
+        })
+
+        .catch(error => {
+            console.log(error);
+        });
+
+
+        function requestPickup(foodId){
+
+            const volunteer_id = localStorage.getItem("volunteer_id");
+
+            fetch("http://localhost:3000/request-pickup", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    food_id: foodId,
+                    volunteer_id: volunteer_id
+                })
+
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                alert(data.message);
+
+            })
+
+            .catch(error => {
+
+                console.log(error);
+
+            });
+
+        }
+        
+
+    fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("navbar").innerHTML = data;
+    });
+
+
+
+    </script>
+
+</body>
+</html>

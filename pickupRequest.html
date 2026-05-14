@@ -1,0 +1,172 @@
+<div id="navbar"></div>
+<div class="container">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickup Requests</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 20px;
+            margin:0;
+        }
+
+        h1{
+            text-align: center;
+        }
+
+        table{
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        th, td{
+            padding: 12px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+
+        th{
+            background: #2c3e50;
+            color: white;
+        }
+        .container{
+            padding:20px;
+        }
+
+    </style>
+</div>
+</head>
+<body>
+
+    <h1>Pickup Requests</h1>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Request ID</th>
+                <th>Food Name</th>
+                <th>Quantity</th>
+                <th>Volunteer</th>
+                <th>Status</th>
+                <th>Request Time</th>
+               <th>Pickup Time</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody id="requestTable"></tbody>
+
+    </table>
+
+    <script>
+
+        fetch("http://localhost:3000/pickup-requests")
+
+        .then(response => response.json())
+
+        .then(data => {
+
+            const table = document.getElementById("requestTable");
+
+            data.forEach(request => {
+
+                const row = `
+<tr>
+
+    <td>${request.request_id}</td>
+
+    <td>${request.food_name}</td>
+
+    <td>${request.quantity}</td>
+
+    <td>${request.volunteer_name}</td>
+
+    <td>${request.status}</td>
+
+    <td>${request.request_time}</td>
+
+    <td>${request.pickup_time || "Not Assigned"}</td>
+
+    <td>
+
+        <button onclick="updateStatus(${request.request_id}, 'accepted')">
+            Accept
+        </button>
+
+        <button onclick="updateStatus(${request.request_id}, 'rejected')">
+            Reject
+        </button>
+
+        <button onclick="updateStatus(${request.request_id}, 'completed')">
+            Complete
+        </button>
+
+    </td>
+
+</tr>
+`;
+
+                table.innerHTML += row;
+
+            });
+
+        })
+
+        .catch(error => {
+            console.log(error);
+        });
+        function updateStatus(requestId, status){
+
+    fetch(`http://localhost:3000/update-request-status/${requestId}`, {
+
+        method: "PUT",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            status: status
+        })
+
+    })
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        alert(data.message);
+
+        location.reload();
+
+    })
+
+    .catch(error => {
+
+        console.log(error);
+
+    });
+
+}
+
+
+    fetch("navbar.html")
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("navbar").innerHTML = data;
+    });
+
+
+
+    </script>
+
+</body>
+</html>

@@ -1,62 +1,173 @@
-<!DOCTYPE html>
-<html>
+<div id="navbar"></div>
+<div class="container">
+    <!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Food</title>
+
+    <style>
+
+        body{
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            margin: 0;
+        }
+
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .form-box{
+            background: white;
+            padding: 30px;
+            width: 400px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h1{
+            text-align: center;
+            margin-bottom: 25px;
+            color: #2c3e50;
+        }
+
+        input{
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        button{
+            width: 100%;
+            padding: 14px;
+            margin-top: 20px;
+            background: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover{
+            background: darkgreen;
+        }
+
+    </style>
+</div>
 </head>
 <body>
 
-<h2>Add Food</h2>
+    <div id="navbar"></div>
 
-<input type="text" id="food_name" placeholder="Food Name"><br><br>
-<input type="number" id="quantity" placeholder="Quantity"><br><br>
-<input type="datetime-local" id="expiry_time"><br><br>
+    <div class="container">
 
-<input type="text" id="street" placeholder="Street"><br><br>
-<input type="text" id="area" placeholder="Area"><br><br>
-<input type="text" id="city" placeholder="City"><br><br>
-<input type="text" id="state" placeholder="State"><br><br>
-<input type="text" id="pincode" placeholder="Pincode"><br><br>
+        <div class="form-box">
 
-<button onclick="addFood()">Add Food</button>
+            <h1>Add Food</h1>
 
-<script>
-function addFood() {
+            <input type="text" id="food_name" placeholder="Food Name">
 
-    const provider_id = localStorage.getItem("provider_id");// important
+            <input type="number" id="quantity" placeholder="Quantity">
 
-    fetch("http://localhost:3000/add-food", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            provider_id: provider_id,
-            food_name: document.getElementById("food_name").value,
-            quantity: document.getElementById("quantity").value,
-            expiry_time: document.getElementById("expiry_time").value,
-            street: document.getElementById("street").value,
-            area: document.getElementById("area").value,
-            city: document.getElementById("city").value,
-            state: document.getElementById("state").value,
-            pincode: document.getElementById("pincode").value
-        })
-    })
-    
-    .then(res => res.text())
+            <input type="datetime-local" id="expiry_time">
+
+            <input type="text" id="street" placeholder="Street">
+
+            <input type="text" id="area" placeholder="Area">
+
+            <input type="text" id="city" placeholder="City">
+
+            <input type="text" id="state" placeholder="State">
+
+            <input type="text" id="pincode" placeholder="Pincode">
+
+            <button onclick="addFood()">
+                Add Food
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        fetch("navbar.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("navbar").innerHTML = data;
+        });
+
+
+        function addFood(){
+
+            const provider_id = localStorage.getItem("provider_id");
+
+            const food_name = document.getElementById("food_name").value;
+            const quantity = document.getElementById("quantity").value;
+            const expiry_time = document.getElementById("expiry_time").value;
+
+            const street = document.getElementById("street").value;
+            const area = document.getElementById("area").value;
+            const city = document.getElementById("city").value;
+            const state = document.getElementById("state").value;
+            const pincode = document.getElementById("pincode").value;
+
+            fetch("http://localhost:3000/add-food", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    provider_id,
+                    food_name,
+                    quantity,
+                    expiry_time,
+                    street,
+                    area,
+                    city,
+                    state,
+                    pincode
+
+                })
+
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                alert(data.message);
+
+            })
+
+            .catch(error => {
+
+                console.log(error);
+
+            });
+
+        }
+         fetch("navbar.html")
+    .then(response => response.text())
     .then(data => {
-        alert(data);
+        document.getElementById("navbar").innerHTML = data;
     });
- let expiry = document.getElementById("expiry_time").value;
-expiry = expiry.replace("T", " ") + ":00";   
-expiry_time: expiry
-if(!expiry){
-    alert("Please select expiry time");
-    return;
-}
 
-
-}
-</script>
+    </script>
 
 </body>
 </html>
