@@ -1,57 +1,247 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
+    <style>
+
+        body{
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #11998e, #38ef7d);
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            height: 100vh;
+        }
+
+        .login-box{
+
+            background: white;
+
+            padding: 40px;
+
+            width: 350px;
+
+            border-radius: 12px;
+
+            box-shadow: 0px 2px 15px rgba(0,0,0,0.2);
+
+            animation: fadeIn 0.7s ease;
+
+        }
+
+        h1{
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+            color: #2c3e50;
+
+        }
+
+        input{
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-top: 15px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 5px;
+
+            box-sizing: border-box;
+
+            font-size: 15px;
+
+        }
+
+        button{
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 20px;
+
+            background: #27ae60;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 5px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+        }
+
+        button:hover{
+
+            background: #1e8449;
+
+            transform: translateY(-2px);
+
+        }
+
+        .register-link{
+
+            text-align: center;
+
+            margin-top: 20px;
+
+        }
+
+        .register-link a{
+
+            text-decoration: none;
+
+            color: #27ae60;
+
+            font-weight: bold;
+
+        }
+
+        @keyframes fadeIn{
+
+            from{
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to{
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+    </style>
+
 </head>
 <body>
 
-<h2>Login</h2>
+    <div class="login-box">
 
-<input type="text" id="emailOrPhone" placeholder="Email or Phone"><br><br>
-<input type="password" id="password" placeholder="Password"><br><br>
+        <h1>Login</h1>
 
-<button onclick="login()">Login</button>
+        <input type="text" id="emailOrPhone" placeholder="Enter Email or Phone">
 
-<script>
-function login() {
-    fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            emailOrPhone: document.getElementById("emailOrPhone").value,
-            password: document.getElementById("password").value
-        })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if(data.success){
-            alert("Login Success");
+        <input type="password" id="password" placeholder="Enter Password">
 
-            // store user info
-            localStorage.setItem("user_id", data.user.user_id);
-            localStorage.setItem("role", data.user.role);
-            localStorage.setItem("provider_id", data.user.provider_id);
+        <button onclick="login()">
+            Login
+        </button>
 
-            // redirect based on role
-           if(data.role === "provider"){
+        <div class="register-link">
 
-    window.location.href = "providerDashboard.html";
+            Don't have an account?
 
-}
+            <a href="index.html">
+                Register
+            </a>
 
-else if(data.role === "volunteer"){
+        </div>
 
-    window.location.href = "volunteerDashboard.html";
+    </div>
 
-}
-        } else {
-            alert("Invalid Credentials");
+    <script>
+
+        function login(){
+
+            const emailOrPhone =
+            document.getElementById("emailOrPhone").value;
+
+            const password =
+            document.getElementById("password").value;
+
+            fetch("http://localhost:3000/login", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    emailOrPhone,
+                    password
+
+                })
+
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                if(data.message === "Login successful"){
+
+                    localStorage.setItem("user_id", data.user.user_id);
+
+                    localStorage.setItem("role", data.user.role);
+
+                    if(data.provider_id){
+
+                        localStorage.setItem("provider_id",
+                        data.provider_id);
+
+                    }
+
+                    if(data.volunteer_id){
+
+                        localStorage.setItem("volunteer_id",
+                        data.volunteer_id);
+
+                    }
+
+                    alert("Login Successful");
+
+                    if(data.user.role === "provider"){
+
+                        window.location.href =
+                        "providerDashboard.html";
+
+                    }
+
+                    else if(data.user.role === "volunteer"){
+
+                        window.location.href =
+                        "volunteerDashboard.html";
+
+                    }
+
+                }
+
+                else{
+
+                    alert(data.message);
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.log(error);
+
+            });
+
         }
-    });
-}
-</script>
+
+    </script>
 
 </body>
 </html>
