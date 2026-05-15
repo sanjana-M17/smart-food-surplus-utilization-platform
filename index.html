@@ -1,43 +1,253 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Food Surplus App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <style>
+
+        body{
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background: linear-gradient(to right, #56ab2f, #a8e063);
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            min-height: 100vh;
+
+            padding: 20px;
+
+        }
+
+        .register-box{
+
+            background: white;
+
+            padding: 40px;
+
+            width: 400px;
+
+            border-radius: 12px;
+
+            box-shadow: 0px 2px 15px rgba(0,0,0,0.2);
+
+            animation: fadeIn 0.7s ease;
+
+        }
+
+        h1{
+
+            text-align: center;
+
+            margin-bottom: 25px;
+
+            color: #2c3e50;
+
+        }
+
+        input, select{
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin-top: 15px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 5px;
+
+            box-sizing: border-box;
+
+            font-size: 15px;
+
+        }
+
+        button{
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-top: 20px;
+
+            background: #27ae60;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 5px;
+
+            font-size: 16px;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+
+        }
+
+        button:hover{
+
+            background: #1e8449;
+
+            transform: translateY(-2px);
+
+        }
+
+        .login-link{
+
+            text-align: center;
+
+            margin-top: 20px;
+
+        }
+
+        .login-link a{
+
+            text-decoration: none;
+
+            color: #27ae60;
+
+            font-weight: bold;
+
+        }
+
+        @keyframes fadeIn{
+
+            from{
+
+                opacity: 0;
+
+                transform: translateY(20px);
+
+            }
+
+            to{
+
+                opacity: 1;
+
+                transform: translateY(0);
+
+            }
+
+        }
+
+    </style>
+
 </head>
 <body>
 
-<h2>Register</h2>
+    <div class="register-box">
 
-<input type="text" id="name" placeholder="Name"><br><br>
-<input type="email" id="email" placeholder="Email"><br><br>
-<input type="text" id="phone" placeholder="Phone"><br><br>
-<input type="password" id="password" placeholder="Password"><br><br>
+        <h1>Register</h1>
 
-<select id="role">
-    <option value="provider">Provider</option>
-    <option value="volunteer">Volunteer</option>
-</select><br><br>
+        <input type="text" id="name" placeholder="Enter Name">
 
-<button onclick="register()">Register</button>
+        <input type="email" id="email" placeholder="Enter Email">
 
-<script>
-function register() {
-    fetch("http://localhost:3000/register", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            name: document.getElementById("name").value,
-            email: document.getElementById("email").value,
-            phone: document.getElementById("phone").value,
-            password: document.getElementById("password").value,
-            role: document.getElementById("role").value
-        })
-    })
-    .then(res => res.text())
-    .then(data => alert(data));
-}
-</script>
+        <input type="text" id="phone" placeholder="Enter Phone Number">
+
+        <input type="password" id="password" placeholder="Enter Password">
+
+        <select id="role">
+
+            <option value="">Select Role</option>
+
+            <option value="provider">Provider</option>
+
+            <option value="volunteer">Volunteer</option>
+
+        </select>
+
+        <button onclick="register()">
+            Register
+        </button>
+
+        <div class="login-link">
+
+            Already have an account?
+
+            <a href="login.html">
+                Login
+            </a>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        function register(){
+
+            const name =
+            document.getElementById("name").value;
+
+            const email =
+            document.getElementById("email").value;
+
+            const phone =
+            document.getElementById("phone").value;
+
+            const password =
+            document.getElementById("password").value;
+
+            const role =
+            document.getElementById("role").value;
+
+            fetch("http://localhost:3000/register", {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    name,
+                    email,
+                    phone,
+                    password,
+                    role
+
+                })
+
+            })
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                alert(data.message);
+
+                if(data.message === "User Registered Successfully"){
+
+                    window.location.href = "login.html";
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.log(error);
+
+            });
+
+        }
+
+    </script>
 
 </body>
 </html>
